@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KGiSL College Chatbot</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* Modern Font Import */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+    
+    /* Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    /* Chat Container */
+    .chat-container {
+      width: 90%;
+      max-width: 500px;
+      height: 80vh;
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Chat Header */
+    .chat-header {
+      background: linear-gradient(135deg, #3a7bd5 0%, #2c5282 100%);
+      color: white;
+      padding: 20px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .chat-header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .chat-header-logo i {
+      font-size: 1.5rem;
+    }
+    
+    /* Chat Box */
+    .chat-box {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background-color: #f8fafc;
+      scroll-behavior: smooth;
+    }
+    
+    /* Scrollbar Styling */
+    .chat-box::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .chat-box::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    .chat-box::-webkit-scrollbar-thumb {
+      background: #c1c9d6;
+      border-radius: 10px;
+    }
+    
+    /* Chat Messages */
+    .user-msg, .bot-msg {
+      margin-bottom: 15px;
+      padding: 12px 18px;
+      border-radius: 18px;
+      max-width: 80%;
+      position: relative;
+      animation: fadeIn 0.3s ease;
+      line-height: 1.5;
+      word-wrap: break-word;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* User Message */
+    .user-msg {
+      background-color: #3a7bd5;
+      color: white;
+      margin-left: auto;
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 2px 10px rgba(58, 123, 213, 0.15);
+    }
+    
+    .user-msg::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: -10px;
+      width: 20px;
+      height: 20px;
+      background-color: inherit;
+      border-bottom-left-radius: 16px;
+      z-index: -1;
+    }
+    
+    /* Bot Message */
+    .bot-msg {
+      background-color: white;
+      color: #333;
+      margin-right: auto;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      border-left: 4px solid #ff6b6b;
+    }
+    
+    .bot-msg::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: -10px;
+      width: 20px;
+      height: 20px;
+      background-color: inherit;
+      border-bottom-right-radius: 16px;
+      z-index: -1;
+    }
+    
+    /* Message Icons */
+    .user-icon, .bot-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 8px;
+      font-size: 14px;
+    }
+    
+    .user-icon {
+      background-color: #2c5282;
+      color: white;
+    }
+    
+    .bot-icon {
+      background-color: #ff6b6b;
+      color: white;
+    }
+    
+    /* Message Content Wrapper */
+    .msg-content {
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    /* Loading Animation */
+    .typing-indicator {
+      display: flex;
+      padding: 8px 12px;
+      background: white;
+      border-radius: 18px;
+      width: fit-content;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    .typing-indicator span {
+      height: 8px;
+      width: 8px;
+      background: #3a7bd5;
+      border-radius: 50%;
+      display: inline-block;
+      margin: 0 2px;
+      animation: bounce 1.2s infinite;
+    }
+    
+    .typing-indicator span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    
+    .typing-indicator span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-8px); }
+    }
+    
+    /* Input Container */
+    .input-container {
+      display: flex;
+      padding: 15px;
+      background-color: white;
+      border-top: 1px solid #eaeaea;
+    }
+    
+    #user-input {
+      flex: 1;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 25px;
+      outline: none;
+      font-size: 0.95rem;
+      transition: border 0.3s ease;
+    }
+    
+    #user-input:focus {
+      border-color: #3a7bd5;
+    }
+    
+    button {
+      width: 42px;
+      height: 42px;
+      margin-left: 10px;
+      background: linear-gradient(135deg, #3a7bd5 0%, #2c5282 100%);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    button:hover {
+      transform: scale(1.05);
+    }
+    
+    button:active {
+      transform: scale(0.95);
+    }
+    
+    /* Welcome Message */
+    .welcome-message {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .college-logo {
+      max-width: 100px;
+      margin: 0 auto 15px;
+      display: block;
+    }
+    
+    /* Voice Assistant Styles */
+    .voice-controls {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    
+    .voice-btn {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee0979 100%);
+      margin: 0 5px;
+    }
+    
+    .voice-btn.listening {
+      animation: pulse 1.5s infinite;
+    }
+    
+    .voice-indicator {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      display: none;
+      z-index: 100;
+    }
+    
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(238, 9, 121, 0.5); }
+      70% { box-shadow: 0 0 0 10px rgba(238, 9, 121, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(238, 9, 121, 0); }
+    }
+    
+    /* Settings Modal */
+    .settings-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .settings-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+    }
+    
+    .settings-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .close-settings {
+      cursor: pointer;
+      font-size: 1.5rem;
+    }
+    
+    .settings-group {
+      margin-bottom: 15px;
+    }
+    
+    .settings-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    
+    .settings-group select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+    
+    .settings-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+    
+    .settings-btn {
+      padding: 8px 15px;
+      border-radius: 5px;
+      border: none;
+      background: #3a7bd5;
+      color: white;
+      cursor: pointer;
+    }
+    
+    /* Toggle Switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+    
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    
+    input:checked + .slider {
+      background-color: #3a7bd5;
+    }
+    
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+    
+    /* Responsive Styles */
+    @media (max-width: 600px) {
+      .chat-container {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+      }
+      
+      .user-msg, .bot-msg {
+        max-width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">
+      <div class="chat-header-logo">
+        <i class="fas fa-graduation-cap"></i>
+        <span>KGiSL College Assistant</span>
+      </div>
+      <i class="fas fa-cog" id="settings-btn"></i>
+    </div>
+    
+    <div class="chat-box" id="chat-box">
+      <div class="welcome-message">
+        <img src="https://tse4.mm.bing.net/th?id=OIP.FCggt5R_3Wbz5ZcVPQZrhAHaGL&pid=Api&P=0&h=180" alt="KGiSL Logo" class="college-logo">
+        <h3>Welcome to KGiSL College Assistant</h3>
+        <p>I'm here to help with admissions, courses, campus facilities, and more!</p>
+        <p>You can type your questions or use the voice assistant.</p>
+      </div>
+      
+      <!-- Messages will appear here -->
+    </div>
+    
+    <div class="input-container">
+      <input type="text" id="user-input" placeholder="Ask me anything about KGiSL College..." onkeydown="checkEnter(event)">
+      <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+      <button class="voice-btn" id="voice-btn" title="Voice Input"><i class="fas fa-microphone"></i></button>
+      <button class="voice-btn" id="speak-btn" title="Text to Speech"><i class="fas fa-volume-up"></i></button>
+    </div>
+  </div>
+  
+  <div class="voice-indicator" id="voice-indicator">Listening...</div>
+  
+  <!-- Settings Modal -->
+  <div class="settings-modal" id="settings-modal">
+    <div class="settings-content">
+      <div class="settings-header">
+        <h3>Voice Assistant Settings</h3>
+        <span class="close-settings" id="close-settings">&times;</span>
+      </div>
+      
+      <div class="settings-group">
+        <label for="voice-select">Text-to-Speech Voice</label>
+        <select id="voice-select"></select>
+      </div>
+      
+      <div class="settings-group">
+        <label for="voice-rate">Speech Rate</label>
+        <input type="range" id="voice-rate" min="0.5" max="2" step="0.1" value="1">
+        <span id="rate-value">1.0</span>
+      </div>
+      
+      <div class="settings-group">
+        <label for="voice-pitch">Speech Pitch</label>
+        <input type="range" id="voice-pitch" min="0.5" max="2" step="0.1" value="1">
+        <span id="pitch-value">1.0</span>
+      </div>
+      
+      <div class="settings-group">
+        <div class="toggle-row">
+          <span>Auto-read bot responses</span>
+          <label class="switch">
+            <input type="checkbox" id="auto-speak-toggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+      
+      <div class="settings-actions">
+        <button class="settings-btn" id="save-settings">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Speech Recognition
+    let recognition;
+    let speechSynthesis = window.speechSynthesis;
+    let currentUtterance = null;
+    
+    // Voice Assistant Settings
+    let settings = {
+      voice: null,
+      rate: 1,
+      pitch: 1,
+      autoSpeak: true
+    };
+    
+    // Escape HTML to prevent XSS
+    const escapeHTML = (str) =>
+      str.replace(/[&<>"']/g, tag => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[tag]));
+    
+    // Initialize Speech Recognition
+    function initSpeechRecognition() {
+      if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+        
+        recognition.onstart = function() {
+          document.getElementById('voice-btn').classList.add('listening');
+          document.getElementById('voice-indicator').style.display = 'block';
+        };
+        
+        recognition.onresult = function(event) {
+          const transcript = Array.from(event.results)
+            .map(result => result[0])
+            .map(result => result.transcript)
+            .join('');
+            
+          document.getElementById('user-input').value = transcript;
+          
+          // If we have a final result, stop listening and send the message
+          if (event.results[0].isFinal) {
+            setTimeout(() => {
+              sendMessage();
+            }, 500);
+          }
+        };
+        
+        recognition.onend = function() {
+          document.getElementById('voice-btn').classList.remove('listening');
+          document.getElementById('voice-indicator').style.display = 'none';
+        };
+        
+        recognition.onerror = function(event) {
+          console.error('Speech recognition error:', event.error);
+          document.getElementById('voice-btn').classList.remove('listening');
+          document.getElementById('voice-indicator').style.display = 'none';
+        };
+      } else {
+        alert('Speech recognition is not supported in your browser. Try Chrome or Edge.');
+        document.getElementById('voice-btn').style.display = 'none';
+      }
+    }
+    
+    // Initialize Speech Synthesis
+    function initSpeechSynthesis() {
+      if ('speechSynthesis' in window) {
+        // Populate voice select dropdown
+        function populateVoiceList() {
+          const voiceSelect = document.getElementById('voice-select');
+          voiceSelect.innerHTML = '';
+          
+          const voices = speechSynthesis.getVoices();
+          
+          // Add default option
+          const defaultOption = document.createElement('option');
+          defaultOption.textContent = 'Default Voice';
+          defaultOption.value = '';
+          voiceSelect.appendChild(defaultOption);
+          
+          for (let i = 0; i < voices.length; i++) {
+            const option = document.createElement('option');
+            option.textContent = `${voices[i].name} (${voices[i].lang})`;
+            option.value = i;
+            
+            if (voices[i].default) {
+              option.selected = true;
+              settings.voice = voices[i];
+            }
+            
+            voiceSelect.appendChild(option);
+          }
+        }
+        
+        // Initial populate and setup event listener for voice changes
+        populateVoiceList();
+        
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+          speechSynthesis.onvoiceschanged = populateVoiceList;
+        }
+        
+        // Set up event listeners for range inputs
+        document.getElementById('voice-rate').addEventListener('input', function(e) {
+          const value = parseFloat(e.target.value);
+          document.getElementById('rate-value').textContent = value.toFixed(1);
+          settings.rate = value;
+        });
+        
+        document.getElementById('voice-pitch').addEventListener('input', function(e) {
+          const value = parseFloat(e.target.value);
+          document.getElementById('pitch-value').textContent = value.toFixed(1);
+          settings.pitch = value;
+        });
+        
+        // Auto-speak toggle
+        document.getElementById('auto-speak-toggle').checked = settings.autoSpeak;
+        document.getElementById('auto-speak-toggle').addEventListener('change', function(e) {
+          settings.autoSpeak = e.target.checked;
+        });
+        
+        // Voice selection
+        document.getElementById('voice-select').addEventListener('change', function(e) {
+          const voices = speechSynthesis.getVoices();
+          const selectedIndex = e.target.value;
+          
+          if (selectedIndex === '') {
+            settings.voice = null;
+          } else {
+            settings.voice = voices[selectedIndex];
+          }
+        });
+      } else {
+        alert('Text-to-speech is not supported in your browser.');
+        document.getElementById('speak-btn').style.display = 'none';
+      }
+    }
+    
+    // Speak text
+    function speakText(text) {
+      // Cancel any ongoing speech
+      if (speechSynthesis.speaking) {
+        speechSynthesis.cancel();
+      }
+      
+      const utterance = new SpeechSynthesisUtterance(text);
+      
+      // Apply settings
+      if (settings.voice) {
+        utterance.voice = settings.voice;
+      }
+      
+      utterance.rate = settings.rate;
+      utterance.pitch = settings.pitch;
+      
+      currentUtterance = utterance;
+      speechSynthesis.speak(utterance);
+    }
+    
+    // Start voice recognition
+    function startVoiceInput() {
+      if (recognition) {
+        // Cancel any ongoing speech to avoid feedback issues
+        if (speechSynthesis.speaking) {
+          speechSynthesis.cancel();
+        }
+        recognition.start();
+      }
+    }
+    
+    // Send message function
+    async function sendMessage() {
+      const input = document.getElementById("user-input");
+      const message = input.value.trim();
+      if (!message) return;
+
+      const chatBox = document.getElementById("chat-box");
+      
+      // Add user message with icon
+      chatBox.innerHTML += `
+        <div class="user-msg">
+          <div class="msg-content">
+            <span>${escapeHTML(message)}</span>
+          </div>
+        </div>`;
+      
+      // Add typing indicator
+      chatBox.innerHTML += `
+        <div class="bot-msg" id="loading" style="background: transparent; box-shadow: none; border-left: none;">
+          <div class="typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>`;
+      
+      chatBox.scrollTop = chatBox.scrollHeight;
+      input.value = "";
+
+      try {
+        // In a real implementation, this would call your backend API
+        // For demo purposes, we'll simulate a response
+        const botReply = await simulateBotResponse(message);
+        document.getElementById("loading").remove();
+        
+        // Add bot message with icon
+        chatBox.innerHTML += `
+          <div class="bot-msg">
+            <div class="msg-content">
+              <span>${escapeHTML(botReply)}</span>
+            </div>
+          </div>`;
+          
+        // Auto-speak the response if enabled
+        if (settings.autoSpeak) {
+          speakText(botReply);
+        }
+      } catch (error) {
+        document.getElementById("loading").remove();
+        chatBox.innerHTML += `
+          <div class="bot-msg">
+            <div class="msg-content">
+              <span>Sorry, I'm having trouble connecting right now. Please try again later.</span>
+            </div>
+          </div>`;
+      }
+      
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+    
+    // Simulate bot response (replace with actual API call in production)
+    function simulateBotResponse(message) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const responses = {
+            "hi": "Hello! Welcome to KGiSL College. How can I assist you today?",
+            "hello": "Hi there! I'm the KGiSL College Assistant. What would you like to know?",
+            "admission": "For admissions, we offer various undergraduate and postgraduate programs in Engineering, Management, and Arts & Science. The admission process typically starts in April. Would you like specific information about any program?",
+            "courses": "KGiSL College offers a wide range of courses including B.Tech, M.Tech, BBA, MBA, BCA, MCA, and many more specialized programs. Which department are you interested in?",
+            "fees": "The fee structure varies by course. For Engineering programs, annual fees range from ₹75,000 to ₹1,25,000. Management courses cost between ₹60,000 to ₹1,00,000 per year. Would you like details for a specific course?",
+            "scholarship": "KGiSL College offers merit scholarships for top performers, sports scholarships, and financial aid for economically disadvantaged students. Scholarships can cover 20% to 100% of tuition fees based on eligibility.",
+            "campus": "Our campus spans 50 acres with modern facilities including smart classrooms, well-equipped laboratories, a central library, sports facilities, hostels, cafeterias, and recreation areas.",
+            "placement": "KGiSL College has an excellent placement record with 90%+ placement rates. Top recruiters include major IT companies, banking institutions, and Fortune 500 companies. The average starting salary ranges from ₹4.5 to ₹12 LPA.",
+            "contact": "You can contact our admissions office at admissions@kgislcollege.edu or call +91-9876543210. Our campus address is KGiSL College, Coimbatore - 641035, Tamil Nadu, India.",
+            "hostel": "We have separate hostels for boys and girls with accommodation options including single, double, and triple sharing rooms. All hostels have Wi-Fi, 24/7 security, dining facilities, and recreational areas."
+          };
+          
+          // Default response
+          let reply = "Thank you for your question. Our admissions team would be happy to provide more information about KGiSL College. Is there anything specific you'd like to know about our programs, campus facilities, or admission process?";
+          
+          // Check if any keywords match
+          for (const [keyword, response] of Object.entries(responses)) {
+            if (message.toLowerCase().includes(keyword)) {
+              reply = response;
+              break;
+            }
+          }
+          
+          resolve(reply);
+        }, 1500);
+      });
+    }
+
+    function checkEnter(e) {
+      if (e.key === "Enter") sendMessage();
+    }
+    
+    // Settings modal functionality
+    document.getElementById('settings-btn').addEventListener('click', function() {
+      document.getElementById('settings-modal').style.display = 'flex';
+    });
+    
+    document.getElementById('close-settings').addEventListener('click', function() {
+      document.getElementById('settings-modal').style.display = 'none';
+    });
+    
+    document.getElementById('save-settings').addEventListener('click', function() {
+      document.getElementById('settings-modal').style.display = 'none';
+    });
+    
+    // Voice button click event
+    document.getElementById('voice-btn').addEventListener('click', startVoiceInput);
+    
+    // Speak button click event
+    document.getElementById('speak-btn').addEventListener('click', function() {
+      const lastBotMessage = document.querySelector('.bot-msg:last-child .msg-content span');
+      if (lastBotMessage) {
+        speakText(lastBotMessage.textContent);
+      }
+    });
+    
+    // Initialize on page load
+    window.onload = function() {
+      initSpeechRecognition();
+      initSpeechSynthesis();
+      
+      setTimeout(() => {
+        const chatBox = document.getElementById("chat-box");
+        const welcomeMessage = "Hi there! I'm the KGiSL College Assistant. How can I help you today?";
+        
+        chatBox.innerHTML += `
+          <div class="bot-msg">
+            <div class="msg-content">
+              <span>${welcomeMessage}</span>
+            </div>
+          </div>`;
+        
+        // Auto-speak welcome message if enabled
+        if (settings.autoSpeak) {
+          speakText(welcomeMessage);
+        }
+      }, 1000);
+    }
+    
+    // Handle outside click on modal
+    window.addEventListener('click', function(event) {
+      const modal = document.getElementById('settings-modal');
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
