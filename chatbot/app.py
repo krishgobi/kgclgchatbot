@@ -1,5 +1,5 @@
 import google.generativeai as genai
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 from dotenv import load_dotenv
 import os
 
@@ -12,9 +12,6 @@ if not gemini_api_key:
 
 genai.configure(api_key=gemini_api_key)
 model = genai.GenerativeModel("gemini-1.5-pro")
-
-# Flask app setup
-app = Flask(__name__)
 
 # Updated Instruction to prepend to all prompts (acts like a system prompt)
 instruction = """You are a helpful assistant for KGiSL College and KG Hospital. 
@@ -81,11 +78,16 @@ Respond politely within 50 words. Answer based on the following dataset:
 - Financial Aid: Financial assistance is available for deserving students based on merit and need.
 """
 
-
+# Flask app setup
+app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return render_template("index1.html")
+
+@app.route("/chat")
+def chat():
+    return render_template("chat.html")
 
 @app.route("/ask", methods=["POST"])
 def ask():

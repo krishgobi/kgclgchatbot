@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KGiSL College - Your Complete Educational Guide</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* Modern Font Import */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    /* Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #333;
+      padding: 40px 20px;
+    }
+    
+    .welcome-container {
+      width: 95%;
+      max-width: 1000px;
+      background-color: white;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+      overflow: hidden;
+      text-align: center;
+      padding: 50px 30px;
+      position: relative;
+    }
+    
+    .bg-pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(circle at 20% 30%, rgba(58, 123, 213, 0.07) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(44, 82, 130, 0.05) 0%, transparent 50%);
+      z-index: 0;
+    }
+    
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .header {
+      margin-bottom: 40px;
+    }
+    
+    .logo {
+      width: 180px;
+      margin-bottom: 25px;
+      filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.1));
+      transition: transform 0.3s ease;
+    }
+    
+    .logo:hover {
+      transform: scale(1.05);
+    }
+    
+    h1 {
+      font-size: 36px;
+      margin-bottom: 15px;
+      color: #2c5282;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    
+    .tagline {
+      font-size: 18px;
+      line-height: 1.7;
+      margin-bottom: 35px;
+      color: #666;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 32px;
+      border-radius: 30px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .primary-btn {
+      background: linear-gradient(135deg, #3a7bd5 0%, #2c5282 100%);
+      color: white;
+      box-shadow: 0 6px 18px rgba(58, 123, 213, 0.3);
+    }
+    
+    .primary-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(58, 123, 213, 0.4);
+    }
+    
+    .secondary-btn {
+      background: white;
+      color: #2c5282;
+      border: 2px solid #e2e8f0;
+    }
+    
+    .secondary-btn:hover {
+      background: #f8fafc;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    }
+    
+    .btn i {
+      margin-left: 10px;
+      font-size: 16px;
+    }
+    
+    .section-title {
+      font-size: 24px;
+      margin-bottom: 30px;
+      color: #2c5282;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(135deg, #3a7bd5 0%, #2c5282 100%);
+      border-radius: 3px;
+    }
+    
+    .features-section {
+      margin-bottom: 50px;
+    }
+    
+    .features {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 25px;
+      margin-top: 40px;
+    }
+    
+    .feature {
+      background-color: #f8fafc;
+      border-radius: 16px;
+      padding: 30px 20px;
+      width: 220px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .feature:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.09);
+      background: linear-gradient(to bottom, #ffffff, #f8fafc);
+    }
+    
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #3a7bd5 0%, #2c5282 100%);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    
+    .feature i {
+      font-size: 24px;
+    }
+    
+    .feature h3 {
+      font-size: 18px;
+      margin-bottom: 12px;
+      color: #2c5282;
+      font-weight: 600;
+    }
+    
+    .feature p {
+      font-size: 14px;
+      margin-bottom: 0;
+      color: #718096;
+      line-height: 1.6;
+    }
+    
+    .search-section {
+      margin-bottom: 50px;
+    }
+    
+    .search-box {
+      display: flex;
+      max-width: 600px;
+      margin: 0 auto;
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+    
+    .search-input {
+      flex: 1;
+      padding: 15px 25px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+    }
+    
+    .search-btn {
+      background: linear-gradient(135deg, #3a7bd5 0%, #2c5282 100%);
+      color: white;
+      border: none;
+      padding: 0 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .search-btn:hover {
+      background: linear-gradient(135deg, #2c5282 0%, #1a365d 100%);
+    }
+    
+    .quick-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 25px;
+      flex-wrap: wrap;
+    }
+    
+    .quick-link {
+      color: #3a7bd5;
+      text-decoration: none;
+      font-size: 14px;
+      padding: 8px 15px;
+      background-color: rgba(58, 123, 213, 0.08);
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+    
+    .quick-link:hover {
+      background-color: rgba(58, 123, 213, 0.15);
+      transform: translateY(-2px);
+    }
+    
+    .testimonials-section {
+      margin-bottom: 50px;
+    }
+    
+    .testimonials {
+      display: flex;
+      overflow-x: auto;
+      gap: 20px;
+      padding: 20px 10px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none; /* Firefox */
+    }
+    
+    .testimonials::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Edge */
+    }
+    
+    .testimonial {
+      min-width: 280px;
+      background-color: white;
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      text-align: left;
+    }
+    
+    .testimonial-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .testimonial-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #3a7bd5;
+      font-weight: 600;
+      font-size: 18px;
+    }
+    
+    .testimonial-info h4 {
+      font-size: 16px;
+      margin-bottom: 5px;
+      color: #2c5282;
+    }
+    
+    .testimonial-info p {
+      font-size: 12px;
+      color: #718096;
+      margin: 0;
+    }
+    
+    .testimonial-content {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #4a5568;
+    }
+    
+    .testimonial-rating {
+      color: #f6ad55;
+      font-size: 14px;
+    }
+    
+    .faq-section {
+      margin-bottom: 50px;
+    }
+    
+    .faq-list {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .faq-item {
+      background-color: white;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+    }
+    
+    .faq-question {
+      padding: 18px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 500;
+      color: #2c5282;
+      transition: all 0.3s ease;
+    }
+    
+    .faq-question:hover {
+      background-color: #f8fafc;
+    }
+    
+    .faq-question i {
+      transition: transform 0.3s ease;
+    }
+    
+    .faq-answer {
+      padding: 0 25px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      background-color: #f8fafc;
+    }
+    
+    .faq-answer p {
+      padding: 20px 0;
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #718096;
+    }
+    
+    .faq-item.active .faq-question {
+      background-color: #f8fafc;
+    }
+    
+    .faq-item.active .faq-question i {
+      transform: rotate(180deg);
+    }
+    
+    .faq-item.active .faq-answer {
+      max-height: 200px;
+    }
+    
+    .contact-section {
+      margin-bottom: 30px;
+    }
+    
+    .contact-methods {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+    
+    .contact-method {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .contact-icon {
+      width: 45px;
+      height: 45px;
+      background: linear-gradient(135deg, #3a7bd5 0%, #2c5282 100%);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .contact-info {
+      text-align: left;
+    }
+    
+    .contact-info h4 {
+      font-size: 16px;
+      margin-bottom: 5px;
+      color: #2c5282;
+    }
+    
+    .contact-info a {
+      color: #3a7bd5;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.3s ease;
+    }
+    
+    .contact-info a:hover {
+      color: #2c5282;
+      text-decoration: underline;
+    }
+    
+    .footer {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #718096;
+    }
+    
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .social-link {
+      width: 40px;
+      height: 40px;
+      background-color: #f8fafc;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #3a7bd5;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+    
+    .social-link:hover {
+      transform: translateY(-3px);
+      background-color: #3a7bd5;
+      color: white;
+      box-shadow: 0 6px 12px rgba(58, 123, 213, 0.2);
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        padding: 20px 10px;
+      }
+      
+      .welcome-container {
+        padding: 30px 20px;
+      }
+      
+      h1 {
+        font-size: 28px;
+      }
+      
+      .tagline {
+        font-size: 16px;
+      }
+      
+      .section-title {
+        font-size: 22px;
+      }
+      
+      .features {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .feature {
+        width: 90%;
+        max-width: 300px;
+      }
+      
+      .contact-methods {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="welcome-container">
+    <div class="bg-pattern"></div>
+    <div class="content-wrapper">
+      <div class="header">
+        <img src="https://tse4.mm.bing.net/th?id=OIP.FCggt5R_3Wbz5ZcVPQZrhAHaGL&pid=Api&P=0&h=180" alt="KGiSL Logo" class="logo">
+        <h1>Welcome to KGiSL College Assistant</h1>
+        <p class="tagline">Your personal AI guide to all things KGiSL. Get instant answers about admissions, courses, campus facilities, events, scholarships and more.</p>
+        
+        <div class="action-buttons">
+          <a href="/chat" class="btn primary-btn">Get Started <i class="fas fa-arrow-right"></i></a>
+          <a href="/about" class="btn secondary-btn">Learn More <i class="fas fa-info-circle"></i></a>
+        </div>
+      </div>
+      
+      <div class="search-section">
+        <h2 class="section-title">How Can We Help You?</h2>
+        <div class="search-box">
+          <input type="text" class="search-input" placeholder="Search for information...">
+          <button class="search-btn"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="quick-links">
+          <a href="#" class="quick-link">Admission Process</a>
+          <a href="#" class="quick-link">Fee Structure</a>
+          <a href="#" class="quick-link">Placements</a>
+          <a href="#" class="quick-link">Campus Tour</a>
+        </div>
+      </div>
+      
+      <div class="features-section">
+        <h2 class="section-title">Our Services</h2>
+        <div class="features">
+          <div class="feature">
+            <div class="feature-icon">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h3>Admissions</h3>
+            <p>Get details about admission processes, eligibility criteria, and important dates.</p>
+          </div>
+          
+          <div class="feature">
+            <div class="feature-icon">
+              <i class="fas fa-book"></i>
+            </div>
+            <h3>Courses</h3>
+            <p>Explore our comprehensive range of undergraduate and postgraduate programs.</p>
+          </div>
+          
+          <div class="feature">
+            <div class="feature-icon">
+              <i class="fas fa-building"></i>
+            </div>
+            <h3>Campus</h3>
+            <p>Learn about our world-class facilities, hostels, and vibrant campus life.</p>
+          </div>
+          
+          <div class="feature">
+            <div class="feature-icon">
+              <i class="fas fa-medal"></i>
+            </div>
+            <h3>Scholarships</h3>
+            <p>Discover various scholarship opportunities to support your education journey.</p>
+          </div>
+          
+          <div class="feature">
+            <div class="feature-icon">
+              <i class="fas fa-laptop-code"></i>
+            </div>
+            <h3>Placements</h3>
+            <p>Explore career opportunities and our strong industry connections.</p>
+          </div>
+          
+          <div class="feature">
+            <div class="feature-icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <h3>Events</h3>
+            <p>Stay updated with the latest events, workshops, and activities.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="testimonials-section">
+        <h2 class="section-title">What Our Students Say</h2>
+        <div class="testimonials">
+          <div class="testimonial">
+            <div class="testimonial-header">
+              <div class="testimonial-avatar">RK</div>
+              <div class="testimonial-info">
+                <h4>Rahul Kumar</h4>
+                <p>Computer Science, 2023</p>
+              </div>
+            </div>
+            <div class="testimonial-content">
+              <p>The facilities and faculty at KGiSL are exceptional. I secured a great job even before completing my degree!</p>
+            </div>
+            <div class="testimonial-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+          
+          <div class="testimonial">
+            <div class="testimonial-header">
+              <div class="testimonial-avatar">SP</div>
+              <div class="testimonial-info">
+                <h4>Sneha Patel</h4>
+                <p>Electronics, 2022</p>
+              </div>
+            </div>
+            <div class="testimonial-content">
+              <p>The practical knowledge and industry exposure I gained at KGiSL has been invaluable for my career.</p>
+            </div>
+            <div class="testimonial-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+          </div>
+          
+          <div class="testimonial">
+            <div class="testimonial-header">
+              <div class="testimonial-avatar">VR</div>
+              <div class="testimonial-info">
+                <h4>Vikram Reddy</h4>
+                <p>MBA, 2023</p>
+              </div>
+            </div>
+            <div class="testimonial-content">
+              <p>The management program at KGiSL prepared me exceptionally well for the corporate world. Highly recommended!</p>
+            </div>
+            <div class="testimonial-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="faq-section">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>What are the admission requirements?</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>Admission requirements vary by program. Generally, we require a minimum of 60% marks in relevant subjects. For detailed information about specific program requirements, use our chat assistant or visit the admissions page.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>Are scholarships available?</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>Yes, KGiSL offers various merit-based and need-based scholarships. Our scholarship programs are designed to recognize and support academic excellence and provide financial assistance to deserving students.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>What is the placement record?</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>KGiSL has an excellent placement record with over 90% of eligible students being placed in reputed companies. Our placement cell works continuously to provide students with the best career opportunities.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="contact-section">
+        <h2 class="section-title">Contact Us</h2>
+        <div class="contact-methods">
+          <div class="contact-method">
+            <div class="contact-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="contact-info">
+              <h4>Email</h4>
+              <a href="mailto:admissions@kgisl.edu">admissions@kgisl.edu</a>
+            </div>
+          </div>
+          
+          <div class="contact-method">
+            <div class="contact-icon">
+              <i class="fas fa-phone-alt"></i>
+            </div>
+            <div class="contact-info">
+              <h4>Phone</h4>
+              <a href="tel:+919876543210">+91 98765 43210</a>
+            </div>
+          </div>
+          
+          <div class="contact-method">
+            <div class="contact-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div class="contact-info">
+              <h4>Address</h4>
+              <p>KGiSL Campus, Coimbatore, Tamil Nadu, India</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer">
+        <p>© 2025 KGiSL College. All rights reserved.</p>
+        <div class="social-links">
+          <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Simple FAQ Toggle Functionality
+    document.querySelectorAll('.faq-question').forEach(question => {
+      question.addEventListener('click', () => {
+        const faqItem = question.parentElement;
+        faqItem.classList.toggle('active');
+      });
+    });
+  </script>
+</body>
+</html>
